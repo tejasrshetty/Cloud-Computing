@@ -1,0 +1,178 @@
+    <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="apigClient.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+</script>
+<style type="text/css">
+	
+	@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+* {
+  box-sizing: border-box;  
+}
+html {
+  background: rgba(black, 0.03);
+}
+body, html {
+  height: 100%;
+}
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 115%;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: lightgrey;
+}
+.chat-output {
+  flex: 1;
+  padding: 20px;
+  width:900px;
+  horizontal-align:center;
+  display: flex;
+  background: white;
+  flex-direction: column;
+  > div {
+    margin: 0 0 20px 0;
+  }
+  .user-message {
+    .message {
+      background: grey;
+    }
+  }
+  .bot-message {
+    text-align: right;
+    .message {
+      background: #eee;
+    }
+  }
+  .message {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 10px;
+  }
+}
+.chat-input {
+  padding: 20px;
+  background: purple;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  width:900px;
+  horizontal-align:center;
+}
+.user-input {
+    width: 100%;
+    font-size: 2rem;
+    font-family: "Georgia", Times, serif;
+    border: 1px solid #ccc;
+    border-radius: 15px 50px 30px;
+    padding: 8px;
+    width: 100%;
+  }
+.titlebox{
+  width:900px;
+  height: 10%;
+  background-color:purple;
+  color:white;
+  vertical-align: top;
+  horizontal-align:center;
+}
+.italic {
+
+  font-family: "Georgia", Times, serif;
+  font-style: italic;
+  font-size: 25px;
+}
+
+</style>
+
+<div class="titlebox">
+    <p class="italic">Find Restaurants</p>
+</div>
+
+<div class="chat-output" id="chat-output">
+  <div class="user-message">
+    <div class="message">Hi! I'm a bot. What's up?</div>
+  </div>
+</div>
+
+<div class="chat-input">
+  <form action="#0" id="user-input-form">
+    <input type="text" id="user-input" class="user-input" placeholder="Talk to the bot.">
+    </textarea>
+  </form>
+</div>
+
+<script type="text/javascript">
+var apigClient = apigClientFactory.newClient();
+</script>
+
+<script type="text/javascript">
+	var outputArea = $("#chat-output");
+
+$("#user-input-form").on("submit", function(e) {
+
+
+  e.preventDefault();
+  
+ var message= $("#user-input").val();
+ 
+  
+  var params = {
+    //This is where any header, path, or querystring request params go. The key is the parameter named as defined in the API
+   
+};
+
+var obj = {"message":message}
+var body = JSON.stringify(obj);
+var additionalParams = {
+    //If there are any unmodeled query parameters or headers that need to be sent with the request you can add them here
+    headers: {
+       
+    },
+    queryParams: {
+       
+    }
+};
+apigClient.chatbotPost(params,body,additionalParams).then(function(result){
+  var response=result.data.body.message
+   setTimeout(function() {
+    outputArea.append(`
+      <div class='user-message'>
+        <div class='message'>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+          ${response}
+        </div>
+      </div>
+    `);
+  }, 250);
+});
+
+
+
+  outputArea.append(`
+    <div class='bot-message'>
+      <div class='message'>
+        ${message}
+      </div>
+    </div>
+  `);
+  
+ 
+  
+  $("#user-input").val("");
+  
+});
+
+
+
+</script>
